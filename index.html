@@ -1,469 +1,160 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Micrositio de Antioqueñidad dedicado al municipio de La Pintada: historia, cultura, turismo, gastronomía y galería." />
-  <meta name="theme-color" content="#0b3d2e" />
-  <title>Antioqueñidad – La Pintada</title>
-
-  <!-- Paleta y estilos base -->
-  <style>
-    :root {
-      --verde-montana: #0b3d2e;
-      --verde-claro: #1f6f54;
-      --amarillo-oro: #f7b500;
-      --cafe-tierra: #6b4f3a;
-      --azul-rio: #2b6cb0;
-      --gris-100: #f7fafc;
-      --gris-200: #edf2f7;
-      --gris-700: #2d3748;
-      --blanco: #ffffff;
-      --negro: #0b1320;
-      --radius-xl: 18px;
-      --shadow-soft: 0 10px 30px rgba(0,0,0,.12);
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--gris-700);
-      background: linear-gradient(180deg, #fafdfc, #f6faf2 200px, #ffffff 600px);
-    }
-
-    /* Header */
-    header {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(11, 61, 46, 0.9);
-      backdrop-filter: saturate(140%) blur(8px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .nav {
-      max-width: 1200px; margin: 0 auto; padding: 10px 20px;
-      display: flex; align-items: center; justify-content: space-between;
-      color: var(--blanco);
-    }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.25); }
-    .brand h1 { font-size: 1.05rem; line-height: 1.1; margin: 0; font-weight: 700; letter-spacing: .3px; }
-    nav ul { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; }
-    nav a { color: #e7ffef; text-decoration: none; font-weight: 600; font-size: .95rem; padding: 10px 12px; border-radius: 999px; }
-    nav a:hover { background: rgba(255,255,255,.12); }
-
-    .menu-btn { display: none; background: transparent; border: 0; color: #e7ffef; font-size: 1.4rem; }
-
-    /* Hero */
-    .hero {
-      position: relative; isolation: isolate;
-      min-height: 70vh; display: grid; place-items: center; text-align: center;
-      color: var(--blanco);
-      background: url('assets/hero-la-pintada.jpg') center/cover no-repeat, linear-gradient(135deg, var(--verde-montana), var(--azul-rio));
-    }
-    .hero::after {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55));
-      z-index: -1;
-    }
-    .hero-inner { max-width: 900px; padding: 60px 20px; }
-    .pill { display: inline-flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.14); font-weight: 700; }
-    .title { font-size: clamp(2.2rem, 4.5vw, 3.8rem); margin: 14px 0 10px; line-height: 1.05; }
-    .subtitle { font-size: clamp(1rem, 1.6vw, 1.2rem); opacity: .95; }
-    .cta {
-      margin-top: 24px; display: inline-flex; gap: 10px;
-    }
-    .btn {
-      appearance: none; border: 0; cursor: pointer; font-weight: 800; letter-spacing: .2px;
-      padding: 12px 18px; border-radius: 12px; transition: transform .06s ease, box-shadow .2s ease, background .2s ease;
-    }
-    .btn-primary { background: var(--amarillo-oro); color: #1b1b1b; box-shadow: var(--shadow-soft); }
-    .btn-primary:hover { transform: translateY(-1px); }
-    .btn-ghost { background: rgba(255,255,255,.08); color: #fff; border: 1px solid rgba(255,255,255,.18); }
-
-    /* Secciones */
-    .section { padding: 72px 20px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-
-    .section h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0 0 18px; color: var(--verde-montana); }
-    .section p.lead { font-size: 1.1rem; color: #425b52; }
-
-    /* Tarjetas */
-    .grid { display: grid; gap: 22px; }
-    .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
-    .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
-    .card { background: var(--blanco); border: 1px solid var(--gris-200); border-radius: var(--radius-xl); box-shadow: var(--shadow-soft); overflow: hidden; }
-    .card .media { height: 180px; background: var(--gris-200); background-size: cover; background-position: center; }
-    .card .content { padding: 18px; }
-    .badge { display: inline-block; background: #e6fff2; color: var(--verde-claro); padding: 6px 10px; border-radius: 999px; font-size: .8rem; font-weight: 800; letter-spacing: .3px; }
-
-    /* Línea de tiempo */
-    .timeline { position: relative; margin: 30px 0; padding-left: 18px; }
-    .timeline::before { content: ""; position: absolute; left: 10px; top: 0; bottom: 0; width: 3px; background: linear-gradient(var(--verde-claro), var(--azul-rio)); border-radius: 3px; }
-    .tl-item { position: relative; margin: 18px 0; padding-left: 24px; }
-    .tl-item::before { content: ""; position: absolute; left: -1px; top: 10px; width: 14px; height: 14px; border-radius: 50%; background: var(--amarillo-oro); border: 3px solid var(--blanco); box-shadow: 0 0 0 3px rgba(247,181,0,.25); }
-
-    /* Galería / Carrusel */
-    .carousel { position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-soft); }
-    .carousel-track { display: flex; transition: transform .6s ease; }
-    .carousel img { width: 100%; height: 420px; object-fit: cover; display: block; }
-    .carousel .control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,.4); color: #fff; border: 0; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; }
-    .carousel .prev { left: 10px; }
-    .carousel .next { right: 10px; }
-    .carousel .dots { position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; }
-    .carousel .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.6); border: 1px solid rgba(0,0,0,.2); cursor: pointer; }
-    .carousel .dot.active { background: var(--amarillo-oro); }
-
-    /* Sabías que */
-    .fact { background: linear-gradient(180deg, #ffffff, #f7fff9); border: 1px solid var(--gris-200); border-radius: var(--radius-xl); padding: 18px; }
-
-    /* Contacto */
-    form { display: grid; gap: 14px; }
-    input, textarea, select { width: 100%; padding: 12px 14px; border: 1px solid #dbe4ea; border-radius: 12px; font: inherit; }
-    textarea { min-height: 120px; resize: vertical; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-    /* Footer */
-    footer { background: var(--verde-montana); color: #cfeee3; padding: 32px 20px; margin-top: 48px; }
-    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; gap: 24px; grid-template-columns: 2fr 1fr 1fr; }
-    .footer-inner a { color: #e7ffef; text-decoration: none; }
-    .credits { text-align: center; font-size: .9rem; margin-top: 16px; color: #bfe7d8; }
-
-    /* Utilidades */
-    .highlight { color: var(--azul-rio); font-weight: 800; }
-    .muted { color: #5a6b66; }
-    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #eef8ff; color: var(--azul-rio); border-radius: 999px; font-weight: 700; font-size: .82rem; }
-    .shadow { box-shadow: var(--shadow-soft); }
-
-    /* Responsive */
-    @media (max-width: 980px) {
-      .grid.cols-3 { grid-template-columns: 1fr 1fr; }
-      .footer-inner { grid-template-columns: 1fr 1fr; }
-      .form-row { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px) {
-      nav ul { display: none; position: absolute; left: 0; right: 0; top: 58px; background: rgba(11,61,46,.98); padding: 12px; flex-direction: column; gap: 6px; }
-      nav ul.open { display: flex; }
-      .menu-btn { display: inline-block; }
-      .grid.cols-3, .grid.cols-2 { grid-template-columns: 1fr; }
-      .hero { min-height: 66vh; }
-      .carousel img { height: 280px; }
-      .footer-inner { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jericó, Antioquia</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #f5fff5, #d0f0d0);
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(90deg, #006400, #228B22, #FFD700);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/4/48/Jeric%C3%B3_bandera.png') no-repeat center/cover;
+            opacity: 0.1;
+        }
+        h1 {
+            font-size: 3.2em;
+            font-weight: bold;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(90deg, #FFD700, #fff, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+        nav {
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            color: #FFD700;
+            text-shadow: 0 0 8px rgba(255,215,0,0.8);
+        }
+        section {
+            padding: 25px;
+            max-width: 1100px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #006400;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2 img {
+            width: 35px;
+            height: 35px;
+        }
+        .carrusel {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scroll-snap-type: x mandatory;
+        }
+        .carrusel img {
+            height: 220px;
+            border-radius: 10px;
+            scroll-snap-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+        .carrusel img:hover {
+            transform: scale(1.08);
+        }
+        footer {
+            background: #004d00;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header aria-label="Encabezado principal">
-    <div class="nav">
-      <div class="brand">
-        <img src="escudo.png" alt="Escudo de La Pintada" />
-        <h1>Antioqueñidad · <span class="highlight">La Pintada</span></h1>
-      </div>
-      <nav aria-label="Navegación primaria">
-        <button class="menu-btn" aria-label="Abrir menú" onclick="toggleMenu()">☰</button>
-        <ul id="menu">
-          <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#historia">Historia</a></li>
-          <li><a href="#cultura">Cultura</a></li>
-          <li><a href="#turismo">Turismo</a></li>
-          <li><a href="#gastronomia">Gastronomía</a></li>
-          <li><a href="#galeria">Galería</a></li>
-          <li><a href="#contacto">Contacto</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <section id="inicio" class="hero" role="banner" aria-label="Bienvenida">
-    <div class="hero-inner">
-      <span class="pill">🌄 Puerta del Suroeste Antioqueño</span>
-      <h2 class="title">La Pintada: tradición, río y montaña</h2>
-      <p class="subtitle">Un municipio que vibra entre el azul del <strong>río Cauca</strong> y el verde de la <strong>cordillera</strong>, con gente cálida, gastronomía deliciosa y paisajes para recordar.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="#turismo">Explorar atractivos</a>
-        <a class="btn btn-ghost" href="#historia" aria-label="Ir a la historia">Conoce su historia</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Historia -->
-  <section id="historia" class="section" aria-labelledby="t-historia">
-    <div class="container">
-      <h2 id="t-historia">Historia del municipio</h2>
-      <p class="lead">El nombre <strong>La Pintada</strong> se asocia a las tonalidades del paisaje y a relatos locales vinculados al tránsito por el <em>río Cauca</em>. Su ubicación estratégica la convirtió en paso obligado hacia el suroeste. Con el tiempo, el comercio, la agricultura y el turismo fortalecieron su identidad.</p>
-
-      <div class="timeline" aria-label="Línea de tiempo histórica">
-        <div class="tl-item">
-          <h3>Periodo prehispánico</h3>
-          <p class="muted">Presencia de comunidades indígenas que habitaron los valles del Cauca, aprovechando la pesca y el intercambio.</p>
-        </div>
-        <div class="tl-item">
-          <h3>Siglos XIX–XX</h3>
-          <p class="muted">Consolidación como punto de comunicación entre regiones; auge del comercio y de la arriería antioqueña.</p>
-        </div>
-        <div class="tl-item">
-          <h3>Actualidad</h3>
-          <p class="muted">Desarrollo turístico y de servicios, con énfasis en naturaleza, descanso y gastronomía suroestana.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Cultura y Tradiciones -->
-  <section id="cultura" class="section" aria-labelledby="t-cultura">
-    <div class="container">
-      <h2 id="t-cultura">Cultura y Tradiciones</h2>
-      <p class="lead">La Pintada celebra la <strong>identidad paisa</strong> con festividades, música y artesanías. El calor del clima se combina con la calidez de su gente.</p>
-      <div class="grid cols-3">
-        <article class="card">
-          <div class="media" style="background-image:url('fiestas.jpg')" role="img" aria-label="Desfile en fiestas del río"></div>
-          <div class="content">
-            <span class="badge">Fiestas</span>
-            <h3>Fiestas del Río</h3>
-            <p>Actividades náuticas, muestras culturales, comparsas y música en torno al río Cauca.</p>
-          </div>
-        </article>
-        <article class="card">
-          <div class="media" style="background-image:url('musica.jpg')" role="img" aria-label="Músicos interpretando bambuco"></div>
-          <div class="content">
-            <span class="badge">Música</span>
-            <h3>Porros y bambucos</h3>
-            <p>Sonoridades tradicionales que acompañan verbenas, encuentros y presentaciones locales.</p>
-          </div>
-        </article>
-        <article class="card">
-          <div class="media" style="background-image:url('artesanias.jfif')" role="img" aria-label="Artesanías paisas"></div>
-          <div class="content">
-            <span class="badge">Artesanías</span>
-            <h3>Hecho a mano</h3>
-            <p>Tejidos, madera y arte local que reflejan oficio, creatividad y memoria.</p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Turismo -->
-  <section id="turismo" class="section" aria-labelledby="t-turismo">
-    <div class="container">
-      <h2 id="t-turismo">Turismo y Naturaleza</h2>
-      <p class="lead">Descubre playas fluviales, puentes emblemáticos y rutas para el descanso. Ideal para escapadas de fin de semana.</p>
-      <div class="grid cols-3">
-        <article class="card">
-          <div class="media" style="background-image:url('cauca.jpg')" role="img" aria-label="Playas del río Cauca"></div>
-          <div class="content">
-            <h3>Río Cauca</h3>
-            <p>Balnearios naturales y paisajes ribereños. Perfecto para plan familiar con responsabilidad ambiental.</p>
-            <span class="chip">🗺️ Ver en el mapa</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="media" style="background-image:url('puente.jpg')" role="img" aria-label="Puente colgante"></div>
-          <div class="content">
-            <h3>Puente colgante</h3>
-            <p>Arquitectura tradicional que conecta historias y caminos del suroeste antioqueño.</p>
-            <span class="chip">📸 Foto imperdible</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="media" style="background-image:url('Sendero.jpg')" role="img" aria-label="Sendero ecológico"></div>
-          <div class="content">
-            <h3>Senderismo y ecoturismo</h3>
-            <p>Rutas de baja y media exigencia. Acompañamiento de guías locales recomendado.</p>
-            <span class="chip">🌿 Naturaleza</span>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Gastronomía -->
-  <section id="gastronomia" class="section" aria-labelledby="t-gastro">
-    <div class="container">
-      <h2 id="t-gastro">Gastronomía</h2>
-      <p class="lead">Sabores que reconfortan: cazuelas, sancochos, arepas, postres y bebidas típicas del suroeste.</p>
-
-      <div class="grid cols-2">
-        <article class="card">
-          <div class="media" style="background-image:url('bandeja.jpg')" role="img" aria-label="Bandeja paisa"></div>
-          <div class="content">
-            <h3>Bandeja paisa</h3>
-            <p>Clásico antioqueño con frijoles, arroz, chicharrón, carne molida, chorizo, huevo, aguacate y arepa.</p>
-          </div>
-        </article>
-        <article class="card">
-          <div class="media" style="background-image:url('sancocho.jpg')" role="img" aria-label="Sancocho antioqueño"></div>
-          <div class="content">
-            <h3>Sancocho antioqueño</h3>
-            <p>De gallina o costilla, con yuca, plátano y mazorca. Ideal para compartir en familia.</p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Galería -->
-  <section id="galeria" class="section" aria-labelledby="t-galeria">
-    <div class="container">
-      <h2 id="t-galeria">Galería</h2>
-      <p class="lead">Explora imágenes de paisajes, cultura y gastronomía. Puedes actualizar las fotos reemplazando los archivos en <code>/assets/</code>.</p>
-
-      <div class="carousel" aria-roledescription="carrusel" aria-label="Galería de La Pintada">
-        <div class="carousel-track" id="track">
-          <img src="panoramica.jpg" alt="Panorámica del río Cauca en La Pintada" />
-          <img src="colgante.png" alt="Puente colgante al atardecer" />
-          <img src="ruta.jfif" alt="Sendero ecológico rodeado de montaña" />
-          <img src="comida.jpg" alt="Plato típico del suroeste antioqueño" />
-        </div>
-        <button class="control prev" aria-label="Anterior" onclick="prevSlide()">‹</button>
-        <button class="control next" aria-label="Siguiente" onclick="nextSlide()">›</button>
-        <div class="dots" id="dots" aria-hidden="true"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Sabías que -->
-  <section class="section" aria-labelledby="t-sabias">
-    <div class="container">
-      <h2 id="t-sabias">¿Sabías que…?</h2>
-      <div class="grid cols-3">
-        <div class="fact">
-          <strong>Clima cálido</strong>
-          <p class="muted">La Pintada goza de temperaturas templadas a cálidas ideales para turismo de descanso.</p>
-        </div>
-        <div class="fact">
-          <strong>Conexión vial</strong>
-          <p class="muted">Es un punto estratégico que comunica a Medellín con el suroeste y el Eje Cafetero.</p>
-        </div>
-        <div class="fact">
-          <strong>Río protagonista</strong>
-          <p class="muted">Las actividades y festividades giran en torno al río Cauca y sus paisajes.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contacto -->
-  <section id="contacto" class="section" aria-labelledby="t-contacto">
-    <div class="container">
-      <h2 id="t-contacto">Contacto</h2>
-      <p class="lead">¿Tienes información, fotos o recomendaciones para enriquecer este micrositio? ¡Escríbenos!</p>
-      <form class="card content" onsubmit="handleSubmit(event)">
-        <div class="form-row">
-          <div>
-            <label for="nombre">Nombre</label>
-            <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required />
-          </div>
-          <div>
-            <label for="email">Correo electrónico</label>
-            <input id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" required />
-          </div>
-        </div>
-        <div>
-          <label for="asunto">Asunto</label>
-          <select id="asunto" name="asunto">
-            <option>Comentarios</option>
-            <option>Aportes culturales</option>
-            <option>Turismo</option>
-            <option>Otros</option>
-          </select>
-        </div>
-        <div>
-          <label for="mensaje">Mensaje</label>
-          <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos tu idea…"></textarea>
-        </div>
-        <button class="btn btn-primary" type="submit">Enviar</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer role="contentinfo">
-    <div class="footer-inner">
-      <div>
-        <h3>Antioqueñidad · La Pintada</h3>
-        <p class="muted">Micrositio educativo y cultural sin fines de lucro. Imágenes con fines ilustrativos.</p>
-      </div>
-      <div>
-        <h4>Secciones</h4>
+    <header>
+        <h1>Jericó, Antioquia - Encanto Colonial y Paisajes Cafeteros</h1>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#historia">Historia</a>
+            <a href="#personajes">Personajes Históricos</a>
+            <a href="#hechos">Hechos Importantes</a>
+            <a href="#turismo">Turismo</a>
+            <a href="#gastronomia">Gastronomía</a>
+            <a href="#galeria">Galería</a>
+        </nav>
+    </header>
+    <section id="historia">
+        <h2><img src="https://cdn-icons-png.flaticon.com/512/290/290095.png" alt="Historia"> Historia de Jericó</h2>
+        <p>Fundado en 1851, Jericó es considerado uno de los pueblos más bellos de Colombia y patrimonio cultural de Antioquia. Conocido como la cuna de la Santa Laura Montoya, primera santa colombiana, su historia está marcada por la colonización antioqueña y el auge cafetero. Sus calles empedradas, casas coloridas y balcones floridos evocan el espíritu del siglo XIX.</p>
+        <img src="calle.jpg" alt="Calle colonial Jericó" width="100%">
+    </section>
+    <section id="personajes">
+        <h2><img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Personajes"> Personajes Históricos</h2>
         <ul>
-          <li><a href="#historia">Historia</a></li>
-          <li><a href="#cultura">Cultura</a></li>
-          <li><a href="#turismo">Turismo</a></li>
-          <li><a href="#galeria">Galería</a></li>
+            <li><b>Santa Laura Montoya</b>: Primera santa colombiana, fundadora de la Congregación de las Misioneras de María Inmaculada y Santa Catalina de Siena. <br><img src="laura.jpg" alt="Santa Laura Montoya" width="300"></li>
+            <li><b>Manuel Mejía Vallejo</b>: Reconocido escritor y novelista antioqueño con gran apego a Jericó. <br><img src="manu.jpg" alt="Manuel Mejía Vallejo" width="300"></li>
         </ul>
-      </div>
-      <div>
-        <h4>Contacto</h4>
+    </section>
+    <section id="hechos">
+        <h2><img src="https://cdn-icons-png.flaticon.com/512/149/149852.png" alt="Hechos"> Hechos Importantes</h2>
+        <p>Jericó fue uno de los principales centros de producción de café en Antioquia durante el siglo XX, lo que impulsó su economía y desarrollo urbano. En 2013, fue incluido en la Red de Pueblos Patrimonio de Colombia.</p>
+        <img src="panorama.jfif" alt="Panorama Jericó" width="100%">
+    </section>
+    <section id="turismo">
+        <h2><img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Turismo"> Turismo y Lugares Emblemáticos</h2>
         <ul>
-          <li><a href="#contacto">Escríbenos</a></li>
-          <li><a href="#mapa">Cómo llegar</a></li>
+            <li>Catedral de Nuestra Señora de las Mercedes</li>
+            <li>Museo de Arte Religioso</li>
+            <li>Mirador Cristo Rey</li>
+            <li>Parque Natural Las Nubes</li>
         </ul>
-      </div>
-    </div>
-    <p class="credits">© <span id="year"></span> Antioqueñidad – La Pintada. Hecho con ❤️ en Antioquia.</p>
-  </footer>
-
-  <!-- Scripts -->
-  <script>
-    // Año dinámico en el footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Menú móvil
-    function toggleMenu(){
-      const menu = document.getElementById('menu');
-      menu.classList.toggle('open');
-    }
-
-    // Carrusel
-    const track = document.getElementById('track');
-    const dotsContainer = document.getElementById('dots');
-    const slides = Array.from(track.children);
-    let index = 0;
-
-    function renderDots(){
-      dotsContainer.innerHTML = '';
-      slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'dot' + (i === index ? ' active' : '');
-        dot.setAttribute('aria-label', 'Ir a la imagen ' + (i+1));
-        dot.addEventListener('click', () => goTo(i));
-        dotsContainer.appendChild(dot);
-      });
-    }
-
-    function goTo(i){
-      index = (i + slides.length) % slides.length;
-      track.style.transform = `translateX(-${index * 100}%)`;
-      renderDots();
-    }
-    function nextSlide(){ goTo(index + 1); }
-    function prevSlide(){ goTo(index - 1); }
-
-    // Auto-rotación
-    let timer = setInterval(nextSlide, 5000);
-    const carousel = document.querySelector('.carousel');
-    carousel.addEventListener('mouseenter', () => clearInterval(timer));
-    carousel.addEventListener('mouseleave', () => timer = setInterval(nextSlide, 5000));
-
-    // Inicializar
-    renderDots();
-
-    // Formulario (demo)
-    function handleSubmit(e){
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target).entries());
-      alert('¡Gracias, ' + data.nombre + '! Tu mensaje fue recibido.');
-      e.target.reset();
-    }
-  </script>
-
-  <!-- Notas de implementación:
-    1) Reemplaza imágenes en /assets/ por fotos reales de La Pintada.
-    2) Para el mapa, inserta un iframe de Google Maps u OpenStreetMap.
-    3) Si lo deseas como SPA o con CMS, podemos migrar a React/Tailwind o integrar un headless CMS.
-  -->
+        <img src="catedral.jfif" alt="Catedral Jericó" width="100%">
+    </section>
+    <section id="gastronomia">
+        <h2><img src="https://cdn-icons-png.flaticon.com/512/857/857681.png" alt="Gastronomía"> Gastronomía</h2>
+        <p>En Jericó se disfrutan platos típicos antioqueños como la bandeja paisa, el sancocho, arepas de maíz pelao y postres como el arequipe artesanal y las brevas con arequipe.</p>
+        <img src="bandeja.jpg" alt="Bandeja paisa" width="100%">
+    </section>
+    <section id="galeria">
+        <h2><img src="https://cdn-icons-png.flaticon.com/512/716/716784.png" alt="Galería"> Galería</h2>
+        <div class="carrusel">
+            <img src="parque.jpg" alt="Panorámica de Jericó">
+            <img src="calle.jpg" alt="Calle colonial">
+            <img src="iglesia.jpg" alt="Iglesia principal">
+        </div>
+    </section>
+    <footer>
+        <p>© 2025 Jericó, Antioquia - Antioqueñidad Viva</p>
+    </footer>
 </body>
 </html>
